@@ -24,15 +24,15 @@ class GminerNode
         exit
     end
   end
-  
-  def processor_path
+
+  def processor_path(env=DAEMON_ENV)
     hash = {'development' => "/workspace/gminer_processor",
             'staging' => "/www/daemons/staging/gminer_processor/current",
             'production' => "/www/daemons/gminer_processor/current"
           }
-    hash[DAEMON_ENV]
+    hash[env]
   end
-  
+
   def launch_processor
     @processor_id += 1
     DaemonKit.logger.debug("Launching Processor: #{@processor_id}")
@@ -43,5 +43,5 @@ class GminerNode
     end
     Process.detach(pid)
   end
-  
+
 end

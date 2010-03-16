@@ -12,7 +12,7 @@ DaemonKit::Initializer.run do |config|
   config.daemon_name = 'gminer_node'
 
   # Force the daemon to be killed after X seconds from asking it to
-  # config.force_kill_wait = 30
+  config.force_kill_wait = 15
 
   # Log backraces when a thread/daemon dies (Recommended)
   # config.backtraces = true

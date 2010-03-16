@@ -30,9 +30,11 @@ DaemonKit::AMQP.run do
     end
   end
 
-  amq = ::MQ.new
-  node = GminerNode.new(amq)
-  amq.queue(GminerNode::NODE_QUEUE_NAME).subscribe do |msg|
-    node.process(msg)
+  @amq = ::MQ.new
+  @amq.prefetch(1)
+  @node = GminerNode.new(@amq)
+  @amq.queue(GminerNode::NODE_QUEUE_NAME, :durable => true).subscribe do |msg|
+#    DaemonKit.logger.debug("GOT MSG: #{msg}")
+    @node.process(msg)
   end
 end
