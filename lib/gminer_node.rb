@@ -28,6 +28,7 @@ class GminerNode
   def processor_path(env=DAEMON_ENV)
     hash = {'development' => "/workspace/gminer_processor",
             'staging' => "/www/daemons/staging/gminer_processor/current",
+            'processing' => "/www/daemons/processing/gminer_processor/current",
             'production' => "/www/daemons/gminer_processor/current"
           }
     hash[env]
@@ -36,10 +37,10 @@ class GminerNode
   def launch_processor
     @processor_id += 1
     DaemonKit.logger.debug("Launching Processor: #{@processor_id}")
-    DaemonKit.logger.debug("/usr/bin/env DAEMON_ENV=#{DAEMON_ENV} #{processor_path}/bin/gminer_processor start --config pid_file=#{processor_path}/log/processor-#{@processor_id}.pid")
+    DaemonKit.logger.debug("#{processor_path}/bin/gminer_processor -e #{DAEMON_ENV} --config pid_file=#{processor_path}/log/processor-#{@processor_id}.pid")
     # launch a processor
     pid = Process.fork do
-      exec("/usr/bin/env DAEMON_ENV=#{DAEMON_ENV} #{processor_path}/bin/gminer_processor start --config pid_file=#{processor_path}/log/processor-#{@processor_id}.pid")
+      Process.exec("#{processor_path}/bin/gminer_processor -e #{DAEMON_ENV} --config pid_file=#{processor_path}/log/processor-#{@processor_id}.pid")
     end
     Process.detach(pid)
   end

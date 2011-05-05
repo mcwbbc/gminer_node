@@ -1,9 +1,13 @@
-# If you need to 'vendor your gems' for deploying your daemons, bundler is a
-# great option. Update this Gemfile with any additional dependencies and run
-# 'gem bundle' to get them all unpacked in vendor/gems.
+source 'http://rubygems.org'
 
-# daemon-kit
+gem 'rake'
 gem 'daemon-kit'
-
-# For more information on bundler, please visit http://github.com/wycats/bundler
 gem 'amqp'
+gem 'json'
+gem 'httparty'
+gem 'uuidtools'
+
+group :test do
+  # bundler requires these gems while running tests
+  gem 'rspec'
+end

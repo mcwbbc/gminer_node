@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe GminerNode do
 
@@ -38,7 +38,7 @@ describe GminerNode do
 
   describe "processor path" do
     it "should return the path for dev" do
-      @n.processor_path('development').should == "/Users/jgeiger/workspace/gminer_processor"
+      @n.processor_path('development').should == "/workspace/gminer_processor"
     end
 
     it "should return the path for staging" do
@@ -48,11 +48,10 @@ describe GminerNode do
 
   describe "launch processor" do
     it "should launch a processor" do
-      obj = mock("obj")
-      Process.should_receive(:fork).and_yield(obj).and_return(123)
+      Process.should_receive(:fork).and_yield.and_return(123)
       Process.should_receive(:detach).with(123)
       @n.stub!(:processor_path).and_return("path")
-      @n.should_receive(:exec).with("/usr/bin/env DAEMON_ENV=test path/bin/gminer_processor start --config pid_file=path/log/processor-1.pid").and_return(true)
+      Process.should_receive(:exec).with("path/bin/gminer_processor -e test --config pid_file=path/log/processor-1.pid").and_return(true)
       @n.launch_processor
     end
   end
